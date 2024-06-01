@@ -6,6 +6,7 @@ const YOUTUBE_SETTINGS_PANEL_CLASSNAME = 'ytp-panel-menu';
 const YOUTEBE_VIDEO_PLAYER_CLASSNAME = 'video-stream html5-main-video';
 const SELECTED_BTN_BG_COLOR = '#717171';
 const SESSION_STORAGE_PLAYBACK_RATE_KEY = 'yt-player-playback-rate';
+const RENDER_INTERVAL_MS = 5;
 
 function doSomething() {
   chrome.runtime.onMessage.addListener((message) => {
@@ -46,7 +47,7 @@ function injectYoutubeTemplate() {
       handleBtnClick('2.00');
       clearInterval(checkRenderedInterval);
     }
-  }, 100);
+  }, RENDER_INTERVAL_MS);
 }
 
 function handleBtnClick(btnId) {
@@ -118,16 +119,16 @@ function handleBtnClick(btnId) {
                       }
                       clearInterval(checkBtnPlaybackSpeedPopupRendered);
                     }
-                  }, 100);
+                  }, RENDER_INTERVAL_MS);
                   clearInterval(checkBtnPlaybackSpeedRendered);
                 }
-              }, 100);
+              }, RENDER_INTERVAL_MS);
               clearInterval(checkBtnSettingsPopupRendered);
             }
-          }, 100);
+          }, RENDER_INTERVAL_MS);
           clearInterval(checkBtnSettingsRendered);
         }
-      }, 100);
+      }, RENDER_INTERVAL_MS);
     });
   }
 }
@@ -158,7 +159,7 @@ function fetchContentTemplate() {
           mySpeedBtn.style.color = 'white';
           clearInterval(checkMySpeedBtnRendered);
         }
-      }, 100);
+      }, RENDER_INTERVAL_MS);
     })
     .catch((err) => {
       console.log(err);
