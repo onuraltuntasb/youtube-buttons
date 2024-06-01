@@ -1,0 +1,31 @@
+.btn-speed-container {
+
+    display: grid;
+    grid-template-columns: 30px 30px 30px 30px;
+    grid-template-rows: 20px 20px;
+}
+
+.ytp-right-controls {
+    display: flex;
+}
+
+#speed-buttons-outerdiv-id {
+    margin-left: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-speed {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 10px;
+    margin: 2px;
+    width: 24px;
+    height: 18px;
+    opacity: 0.9;
+    border-radius: 4px;
+    cursor: pointer;
+}
