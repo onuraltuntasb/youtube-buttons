@@ -81,9 +81,7 @@ These are some technologies used to develop the project.
    ```
 2. Go chrome manage extension menu
 3. Click load unpacked
-4. Chose cloned folder of repo
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+4. Choose cloned folder of repo
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
