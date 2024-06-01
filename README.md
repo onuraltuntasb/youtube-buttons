@@ -109,7 +109,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 Onur Altuntas - onuraltuntasbusiness@gmail.com
 
-Project Link: [https://github.com/onuraltuntasb/feelsafe-ui](https://github.com/onuraltuntasb/youtube-buttons)
+Project Link: [https://github.com/onuraltuntasb/youtube-buttons](https://github.com/onuraltuntasb/youtube-buttons)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
