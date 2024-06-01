@@ -58,7 +58,7 @@
 youtube-buttons is a chrome extension for youtube original video player to make
 easy usage of some of buttons.
 
-I created this extension to make my life easy so the code is clean but there are
+I created this extension to make my life easier, the code is clean but there are
 some points that open for improvement so feel free create issue.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
