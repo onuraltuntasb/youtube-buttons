@@ -61,12 +61,16 @@ function handleBtnClick(btnId) {
           // console.log("btnSettings clicked!");
           let checkBtnSettingsPopupRendered = setInterval(() => {
             let btnSettingsPopup = document.getElementsByClassName(YOUTUBE_SETTINGS_PANEL_CLASSNAME)[0];
+
             if (btnSettingsPopup != undefined || btnSettingsPopup != null) {
               btnSettingsPopup.click();
               // console.log("btnSettingsPopup clicked!", btnSettingsPopup);
 
               let checkBtnPlaybackSpeedRendered = setInterval(() => {
-                let btnPlaybackSpeed = btnSettingsPopup.children[btnSettingsPopup.childElementCount - 2];
+                // find playbackSpeed button as order (i don't want to deal with
+                // language spesifications)
+                let btnPlaybackSpeed = btnSettingsPopup.children[btnSettingsPopup.childElementCount - 3];
+
                 if (btnPlaybackSpeed != undefined || btnPlaybackSpeed != null) {
                   btnPlaybackSpeed.click();
                   // console.log("btnPlaybackSpeed clicked!", btnPlaybackSpeed);
