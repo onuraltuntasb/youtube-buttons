@@ -1,11 +1,19 @@
-.btn-speed-container {
-    display: grid;
+#btn-speed-container {
+}
+
+#current-speed {
+    display: block;
+}
+
+#btns-speed-wrapper {
+    /* grid */
+    display: none;
     grid-template-columns: 30px 30px 30px 30px;
     grid-template-rows: 20px 20px;
 }
 
 .ytp-right-controls {
-    display: flex;
+    display: block;
 }
 
 #speed-buttons-outerdiv-id {

@@ -2,7 +2,7 @@ const SPEED_BUTTONS_OUTER_DIV_ID = 'speed-buttons-outerdiv-id';
 const QUALITY_BUTTONS_OUTER_DIV_ID = 'quality-buttons-outerdiv-id';
 
 const YOUTUBE_INJECT_DIV_CLASSNAME = 'ytp-right-controls';
-const SPEED_BUTTONS_TEMPLATE_OUTER_DIV_CLASSNAME = 'btn-speed-container';
+const SPEED_BUTTONS_TEMPLATE_OUTER_DIV_ID = 'btn-speed-container';
 const YOUTUBE_SETTINGS_BUTTON_QUERY = 'button[data-tooltip-target-id="ytp-settings-button"]';
 const YOUTUBE_SETTINGS_PANEL_CLASSNAME = 'ytp-panel-menu';
 const YOUTEBE_VIDEO_PLAYER_CLASSNAME = 'video-stream html5-main-video';
@@ -18,7 +18,7 @@ function starter() {
     chrome.runtime.onMessage.addListener((message) => {
         //url change listener
         if (message.action === 'urlChanged') {
-            injectYoutubeTemplate();
+            injectYoutubeSpeedButtons();
             injectYoutubeQualityButtons();
         }
     });
@@ -117,7 +117,30 @@ function injectYoutubeQualityButtons() {
                                         }
                                     }, RENDER_INTERVAL_MS);
 
-                                    //TODO: click to video
+                                    //give toggle to currentSpeedBtn
+                                    let currentSpeedEl = document.getElementById('current-speed');
+                                    let btnSpeedContainerEl = document.getElementById('btn-speed-container');
+                                    if (
+                                        currentSpeedEl !== undefined &&
+                                        currentSpeedEl !== null &&
+                                        btnSpeedContainerEl !== undefined &&
+                                        btnSpeedContainerEl !== null
+                                    ) {
+                                        console.log('currentSpeedEl :', currentSpeedEl);
+
+                                        currentSpeedEl.addEventListener('mouseover', function () {
+                                            let speedWrapperEl = document.getElementById('btns-speed-wrapper');
+                                            speedWrapperEl.style.display = 'grid';
+                                            currentSpeedEl.style.display = 'none';
+                                        });
+                                        btnSpeedContainerEl.addEventListener('mouseleave', function () {
+                                            let speedWrapperEl = document.getElementById('btns-speed-wrapper');
+                                            speedWrapperEl.style.display = 'none';
+                                            currentSpeedEl.style.display = 'block';
+                                        });
+                                    }
+
+                                    //click to video
                                     let videoEl = document.getElementsByClassName(YOUTEBE_VIDEO_PLAYER_CLASSNAME)[0];
                                     let checkVideoElRendered = setInterval(() => {
                                         if (videoEl !== undefined && videoEl !== null) {
@@ -141,7 +164,6 @@ function injectYoutubeQualityButtons() {
 }
 
 function handleQualityButtons(btnId) {
-    console.log('click');
     if (btnId) {
         document.getElementById(btnId).addEventListener('click', function () {
             let checkBtnSettingsRendered = setInterval(() => {
@@ -219,6 +241,22 @@ function handleQualityButtons(btnId) {
     }
 }
 
+function getPlaybackSpeed() {
+    let playbackSpeedData = sessionStorage.getItem(SESSION_STORAGE_PLAYBACK_RATE_KEY);
+    let playbackSpeed = '1.00';
+    if (playbackSpeedData) {
+        playbackSpeed = JSON.parse(playbackSpeedData).data;
+    }
+    let psLength = [...playbackSpeed].length;
+    if (psLength == 1) {
+        playbackSpeed = playbackSpeed + '.00';
+    } else if (psLength == 3) {
+        playbackSpeed = playbackSpeed + '0';
+    }
+
+    return playbackSpeed;
+}
+
 function injectYoutubeSpeedButtons() {
     // SPEED BUTTONS //
     if (document.getElementById(SPEED_BUTTONS_OUTER_DIV_ID)) {
@@ -232,8 +270,14 @@ function injectYoutubeSpeedButtons() {
     fetchSpeedButtonsTemplate();
 
     let checkRenderedInterval = setInterval(() => {
-        let el = document.getElementsByClassName(SPEED_BUTTONS_TEMPLATE_OUTER_DIV_CLASSNAME)[0];
+        let el = document.getElementById(SPEED_BUTTONS_TEMPLATE_OUTER_DIV_ID);
+
         if (el != undefined || el != null) {
+            let currentSpeedEl = document.getElementById('current-speed');
+            if (currentSpeedEl !== undefined && currentSpeedEl !== null) {
+                currentSpeedEl.innerHTML = getPlaybackSpeed();
+            }
+
             handleSpeedBtnClick('0.25');
             handleSpeedBtnClick('0.50');
             handleSpeedBtnClick('0.75');
@@ -248,6 +292,7 @@ function injectYoutubeSpeedButtons() {
 }
 
 function handleSpeedBtnClick(btnId) {
+    console.log('handleSpeedBtnClick :', 'handleSpeedBtnClick');
     if (document.getElementById(btnId)) {
         document.getElementById(btnId).addEventListener('click', function () {
             let checkBtnSettingsRendered = setInterval(() => {
@@ -372,12 +417,11 @@ function handleSpeedBtnClick(btnId) {
                                             }
                                             if (btnSpeed) {
                                                 btnSpeed.click();
+
                                                 let videoEl =
                                                     document.getElementsByClassName(YOUTEBE_VIDEO_PLAYER_CLASSNAME)[0];
                                                 videoEl.click();
-                                                let speedButtons = document.getElementsByClassName(
-                                                    SPEED_BUTTONS_TEMPLATE_OUTER_DIV_CLASSNAME,
-                                                )[0];
+                                                let speedButtons = document.getElementById('btns-speed-wrapper');
                                                 if (speedButtons) {
                                                     [...speedButtons.children].forEach((el) => {
                                                         // console.log("el:", el);
@@ -394,6 +438,13 @@ function handleSpeedBtnClick(btnId) {
                                                     mySpeedBtn.style.background = SELECTED_BTN_BG_COLOR;
                                                     mySpeedBtn.style.color = 'white';
                                                 }
+                                                let checkCurrentSpeedElRendered = setInterval(() => {
+                                                    let currentSpeedEl = document.getElementById('current-speed');
+                                                    if (currentSpeedEl !== undefined && currentSpeedEl !== null) {
+                                                        currentSpeedEl.innerHTML = getPlaybackSpeed();
+                                                        clearInterval(checkCurrentSpeedElRendered);
+                                                    }
+                                                }, RENDER_INTERVAL_MS);
                                             }
                                             clearInterval(checkBtnPlaybackSpeedPopupRendered);
                                         }
@@ -417,19 +468,9 @@ function fetchSpeedButtonsTemplate() {
         .then((data) => {
             document.getElementById(SPEED_BUTTONS_OUTER_DIV_ID).innerHTML = data;
             //set css to button as playback speed
-            let playbackSpeedData = sessionStorage.getItem(SESSION_STORAGE_PLAYBACK_RATE_KEY);
-            let playbackSpeed = '1.00';
-            if (playbackSpeedData) {
-                playbackSpeed = JSON.parse(playbackSpeedData).data;
-            }
-            let psLength = [...playbackSpeed].length;
-            if (psLength == 1) {
-                playbackSpeed = playbackSpeed + '.00';
-            } else if (psLength == 3) {
-                playbackSpeed = playbackSpeed + '0';
-            }
+
             // console.log("playbackspeed : ", playbackSpeed);
-            let mySpeedBtn = document.getElementById(playbackSpeed);
+            let mySpeedBtn = document.getElementById(getPlaybackSpeed());
             let checkMySpeedBtnRendered = setInterval(() => {
                 if (mySpeedBtn != undefined || mySpeedBtn != null) {
                     // console.log("mySpeedBtn : ", mySpeedBtn);
