@@ -81,21 +81,21 @@ function handleBtnClick(btnId) {
                       // console.log("btnPlaybackSpeedPopup !", btnPlaybackSpeedPopup);
                       let btnSpeed = null;
                       if (btnId == '0.25') {
-                        btnSpeed = btnPlaybackSpeedPopup.children[0];
-                      } else if (btnId == '0.50') {
                         btnSpeed = btnPlaybackSpeedPopup.children[1];
-                      } else if (btnId == '0.75') {
+                      } else if (btnId == '0.50') {
                         btnSpeed = btnPlaybackSpeedPopup.children[2];
-                      } else if (btnId == '1.00') {
+                      } else if (btnId == '0.75') {
                         btnSpeed = btnPlaybackSpeedPopup.children[3];
-                      } else if (btnId == '1.25') {
+                      } else if (btnId == '1.00') {
                         btnSpeed = btnPlaybackSpeedPopup.children[4];
-                      } else if (btnId == '1.50') {
+                      } else if (btnId == '1.25') {
                         btnSpeed = btnPlaybackSpeedPopup.children[5];
-                      } else if (btnId == '1.75') {
+                      } else if (btnId == '1.50') {
                         btnSpeed = btnPlaybackSpeedPopup.children[6];
-                      } else if (btnId == '2.00') {
+                      } else if (btnId == '1.75') {
                         btnSpeed = btnPlaybackSpeedPopup.children[7];
+                      } else if (btnId == '2.00') {
+                        btnSpeed = btnPlaybackSpeedPopup.children[8];
                       }
                       if (btnSpeed) {
                         btnSpeed.click();
