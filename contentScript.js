@@ -7,7 +7,9 @@ const YOUTEBE_VIDEO_PLAYER_CLASSNAME = 'video-stream html5-main-video';
 const SELECTED_BTN_BG_COLOR = '#717171';
 const SESSION_STORAGE_PLAYBACK_RATE_KEY = 'yt-player-playback-rate';
 const RENDER_INTERVAL_MS = 5;
-const MENU_ITEM_CLASSNAME = 'ytp-menuitem '; // there is one " " space char at the end of classname!
+const YOUTUBE_MENU_ITEM_CLASSNAME = 'ytp-menuitem '; // there is one " " space char at the end of classname!
+const YOUTUBE_MENU_ITEM_LABEL_CLASSNAME = 'ytp-menuitem-label';
+
 
 function doSomething() {
     chrome.runtime.onMessage.addListener((message) => {
@@ -86,14 +88,13 @@ function handleBtnClick(btnId) {
 
                                             let btnPlaybackSpeedPopupArray = Array.from(
                                                 btnPlaybackSpeedPopup.children,
-                                            ).filter((el) => el.className === 'ytp-menuitem ');
+                                            ).filter((el) => el.className === YOUTUBE_MENU_ITEM_CLASSNAME);
 
                                             let btnSpeed = null;
                                             if (btnId == '0.25') {
                                                 btnPlaybackSpeedPopupArray.forEach((el) => {
                                                     let ch = el.children[0];
-                                                    if (ch.className === 'ytp-menuitem-label') {
-                                                        console.log('ch innerHtml :', ch.innerHTML);
+                                                    if (ch.className === YOUTUBE_MENU_ITEM_LABEL_CLASSNAME) {
                                                         if (ch.innerHTML === '0.25') {
                                                             btnSpeed = el;
                                                         }
@@ -104,7 +105,7 @@ function handleBtnClick(btnId) {
                                             } else if (btnId == '0.50') {
                                                 btnPlaybackSpeedPopupArray.forEach((el) => {
                                                     let ch = el.children[0];
-                                                    if (ch.className === 'ytp-menuitem-label') {
+                                                    if (ch.className === YOUTUBE_MENU_ITEM_LABEL_CLASSNAME) {
                                                         if (ch.innerHTML === '0.50' || ch.innerHTML === '0.5') {
                                                             btnSpeed = el;
                                                         }
@@ -113,7 +114,7 @@ function handleBtnClick(btnId) {
                                             } else if (btnId == '0.75') {
                                                 btnPlaybackSpeedPopupArray.forEach((el) => {
                                                     let ch = el.children[0];
-                                                    if (ch.className === 'ytp-menuitem-label') {
+                                                    if (ch.className === YOUTUBE_MENU_ITEM_LABEL_CLASSNAME) {
                                                         if (ch.innerHTML === '0.75') {
                                                             btnSpeed = el;
                                                         }
@@ -123,7 +124,7 @@ function handleBtnClick(btnId) {
                                                 console.log('btnplaybakcspeed 1.0 :', btnPlaybackSpeedPopupArray);
                                                 btnPlaybackSpeedPopupArray.forEach((el) => {
                                                     let ch = el.children[0];
-                                                    if (ch.className === 'ytp-menuitem-label') {
+                                                    if (ch.className === YOUTUBE_MENU_ITEM_LABEL_CLASSNAME) {
                                                         if (
                                                             ch.innerHTML === 'Normal' ||
                                                             ch.innerHTML === '1.00' ||
@@ -137,7 +138,7 @@ function handleBtnClick(btnId) {
                                             } else if (btnId == '1.25') {
                                                 btnPlaybackSpeedPopupArray.forEach((el) => {
                                                     let ch = el.children[0];
-                                                    if (ch.className === 'ytp-menuitem-label') {
+                                                    if (ch.className === YOUTUBE_MENU_ITEM_LABEL_CLASSNAME) {
                                                         if (ch.innerHTML === '1.25') {
                                                             btnSpeed = el;
                                                         }
@@ -146,7 +147,7 @@ function handleBtnClick(btnId) {
                                             } else if (btnId == '1.50') {
                                                 btnPlaybackSpeedPopupArray.forEach((el) => {
                                                     let ch = el.children[0];
-                                                    if (ch.className === 'ytp-menuitem-label') {
+                                                    if (ch.className === YOUTUBE_MENU_ITEM_LABEL_CLASSNAME) {
                                                         if (ch.innerHTML === '1.50' || ch.innerHTML === '1.5') {
                                                             btnSpeed = el;
                                                         }
@@ -155,7 +156,7 @@ function handleBtnClick(btnId) {
                                             } else if (btnId == '1.75') {
                                                 btnPlaybackSpeedPopupArray.forEach((el) => {
                                                     let ch = el.children[0];
-                                                    if (ch.className === 'ytp-menuitem-label') {
+                                                    if (ch.className === YOUTUBE_MENU_ITEM_LABEL_CLASSNAME) {
                                                         if (ch.innerHTML === '1.75') {
                                                             btnSpeed = el;
                                                         }
@@ -165,7 +166,7 @@ function handleBtnClick(btnId) {
 
                                                 btnPlaybackSpeedPopupArray.forEach((el) => {
                                                     let ch = el.children[0];
-                                                    if (ch.className === 'ytp-menuitem-label') {
+                                                    if (ch.className === YOUTUBE_MENU_ITEM_LABEL_CLASSNAME) {
                                                         if (
                                                             ch.innerHTML === '2.00' ||
                                                             ch.innerHTML === '2.0' ||
