@@ -76,21 +76,32 @@ function injectYoutubeQualityButtons() {
 
                                     //inject quality buttons
                                     let btnQualityContainerEl = document.createElement('div');
-                                    btnQualityContainerEl.className = 'btn-quality-container';
+                                    btnQualityContainerEl.id = 'btn-quality-container';
+                                    let btnsQualityWrapperEl = document.createElement('div');
+                                    btnsQualityWrapperEl.id = 'btns-quality-wrapper';
                                     btnQualityPopupArray.forEach((el) => {
                                         let btnQualityEl = document.createElement('button');
-                                        btnQualityEl.classList = 'btn-quality';
+                                        btnQualityEl.className = 'btn-quality';
                                         let tempInner =
                                             el.children[0].children[0].children[0].innerHTML.split(' <sup')[0];
                                         console.log('tempInner :', tempInner);
                                         btnQualityEl.id = tempInner;
                                         btnQualityEl.innerHTML = tempInner;
 
-                                        btnQualityContainerEl.appendChild(btnQualityEl);
+                                        btnsQualityWrapperEl.appendChild(btnQualityEl);
+                                        btnQualityContainerEl.appendChild(btnsQualityWrapperEl);
                                     });
 
+                                    let btnCurrentQualityEl = document.createElement('button');
+                                    btnCurrentQualityEl.id = 'current-quality';
+                                    btnCurrentQualityEl.innerHTML = getQuality() + 'p';
+                                    btnQualityContainerEl.appendChild(btnCurrentQualityEl);
+
                                     let insertPoint = document.getElementsByClassName(YOUTUBE_INJECT_DIV_CLASSNAME)[0];
-                                    insertPoint.insertBefore(btnQualityContainerEl, insertPoint.children[4]);
+                                    let qualityInsertPoint = document.createElement('div');
+                                    qualityInsertPoint.id = QUALITY_BUTTONS_OUTER_DIV_ID;
+                                    qualityInsertPoint.appendChild(btnQualityContainerEl);
+                                    insertPoint.insertBefore(qualityInsertPoint, insertPoint.children[4]);
 
                                     let qualityData = localStorage.getItem(LOCAL_STORAGE_QUALITY_RATE_KEY);
                                     let quality = '144';
@@ -107,38 +118,44 @@ function injectYoutubeQualityButtons() {
                                     }
 
                                     let checkDynamicQualityButtonsRendered = setInterval(() => {
-                                        if (document.getElementsByClassName('btn-quality-container')[0]) {
+                                        if (document.getElementById('btn-quality-container')) {
                                             btnQualityPopupArray.forEach((el) => {
                                                 let tempInner =
                                                     el.children[0].children[0].children[0].innerHTML.split(' <sup')[0];
                                                 handleQualityButtons(tempInner);
                                             });
+
+                                            let btnCurrentQualityEl1 = document.getElementById('current-quality');
+                                            let btnQualityContainerEl1 =
+                                                document.getElementById('btn-quality-container');
+
+                                                console.log("btnCurrentQualityEl1:",btnCurrentQualityEl1);
+                                                console.log("btnQualityContainerEl1:",btnQualityContainerEl1);
+
+
+                                            // start give toggle to currentSpeedBtn
+                                            if (
+                                                btnCurrentQualityEl1 !== undefined &&
+                                                btnCurrentQualityEl1 !== null &&
+                                                btnQualityContainerEl1 !== undefined &&
+                                                btnQualityContainerEl1 !== null
+                                            ) {
+                                                console.log('currentQualityEl :', btnCurrentQualityEl1);
+                                                let qualityWrapperEl = document.getElementById('btns-quality-wrapper');
+
+                                                btnCurrentQualityEl1.addEventListener('mouseover', function () {
+                                                    qualityWrapperEl.style.display = 'grid';
+                                                    btnCurrentQualityEl1.style.display = 'none';
+                                                });
+                                                btnQualityContainerEl1.addEventListener('mouseleave', function () {
+                                                    qualityWrapperEl.style.display = 'none';
+                                                    btnCurrentQualityEl1.style.display = 'block';
+                                                });
+                                            }
+
                                             clearInterval(checkDynamicQualityButtonsRendered);
                                         }
                                     }, RENDER_INTERVAL_MS);
-
-                                    //give toggle to currentSpeedBtn
-                                    let currentSpeedEl = document.getElementById('current-speed');
-                                    let btnSpeedContainerEl = document.getElementById('btn-speed-container');
-                                    if (
-                                        currentSpeedEl !== undefined &&
-                                        currentSpeedEl !== null &&
-                                        btnSpeedContainerEl !== undefined &&
-                                        btnSpeedContainerEl !== null
-                                    ) {
-                                        console.log('currentSpeedEl :', currentSpeedEl);
-
-                                        currentSpeedEl.addEventListener('mouseover', function () {
-                                            let speedWrapperEl = document.getElementById('btns-speed-wrapper');
-                                            speedWrapperEl.style.display = 'grid';
-                                            currentSpeedEl.style.display = 'none';
-                                        });
-                                        btnSpeedContainerEl.addEventListener('mouseleave', function () {
-                                            let speedWrapperEl = document.getElementById('btns-speed-wrapper');
-                                            speedWrapperEl.style.display = 'none';
-                                            currentSpeedEl.style.display = 'block';
-                                        });
-                                    }
 
                                     //click to video
                                     let videoEl = document.getElementsByClassName(YOUTEBE_VIDEO_PLAYER_CLASSNAME)[0];
@@ -214,16 +231,36 @@ function handleQualityButtons(btnId) {
                                             );
                                             btnQuality.click();
 
-                                            let videoEl =
-                                                document.getElementsByClassName(YOUTEBE_VIDEO_PLAYER_CLASSNAME)[0];
-                                            videoEl.click();
+                                            // let videoEl =
+                                            //     document.getElementsByClassName(YOUTEBE_VIDEO_PLAYER_CLASSNAME)[0];
+                                            // videoEl.click();
                                             //TODO: change style of selected btn
+
+                                            let qualityButtons = document.getElementById('btns-quality-wrapper');
+                                            if (qualityButtons) {
+                                                [...qualityButtons.children].forEach((el) => {
+                                                    // console.log("el:", el);
+                                                    if (el.id != btnId) {
+                                                        el.style.background = 'white';
+                                                        el.style.color = 'black';
+                                                    }
+                                                });
+                                            }
+
+                                            let btnCurrentQualityEl = document.getElementById("current-quality");
+                                            if(btnCurrentQualityEl !==undefined && btnCurrentQualityEl!==null){
+                                                btnCurrentQualityEl.innerHTML = getQuality();
+                                            }
+
                                             let myQualityBtn = document.getElementById(btnId);
                                             if (myQualityBtn != undefined || myQualityBtn != null) {
                                                 // console.log("myQualityBtn : ", myQualityBtn);
                                                 myQualityBtn.style.background = SELECTED_BTN_BG_COLOR;
                                                 myQualityBtn.style.color = 'white';
                                             }
+
+                                           
+
 
                                             clearInterval(checkBtnQualityPopupRendered);
                                         }
@@ -257,6 +294,19 @@ function getPlaybackSpeed() {
     return playbackSpeed;
 }
 
+function getQuality() {
+    let qualityData = localStorage.getItem(LOCAL_STORAGE_QUALITY_RATE_KEY);
+    let quality = '144';
+    if (qualityData) {
+        let qualityProperty = JSON.parse(qualityData).data;
+        quality = JSON.parse(qualityProperty).quality;
+
+        return quality;
+    } else {
+        return -1;
+    }
+}
+
 function injectYoutubeSpeedButtons() {
     // SPEED BUTTONS //
     if (document.getElementById(SPEED_BUTTONS_OUTER_DIV_ID)) {
@@ -277,6 +327,29 @@ function injectYoutubeSpeedButtons() {
             if (currentSpeedEl !== undefined && currentSpeedEl !== null) {
                 currentSpeedEl.innerHTML = getPlaybackSpeed();
             }
+
+            // start give toggle to currentSpeedBtn
+            let btnSpeedContainerEl = document.getElementById('btn-speed-container');
+            if (
+                currentSpeedEl !== undefined &&
+                currentSpeedEl !== null &&
+                btnSpeedContainerEl !== undefined &&
+                btnSpeedContainerEl !== null
+            ) {
+                console.log('currentSpeedEl :', currentSpeedEl);
+
+                currentSpeedEl.addEventListener('mouseover', function () {
+                    let speedWrapperEl = document.getElementById('btns-speed-wrapper');
+                    speedWrapperEl.style.display = 'grid';
+                    currentSpeedEl.style.display = 'none';
+                });
+                btnSpeedContainerEl.addEventListener('mouseleave', function () {
+                    let speedWrapperEl = document.getElementById('btns-speed-wrapper');
+                    speedWrapperEl.style.display = 'none';
+                    currentSpeedEl.style.display = 'block';
+                });
+            }
+            // end give toggle to currentSpeedBtn
 
             handleSpeedBtnClick('0.25');
             handleSpeedBtnClick('0.50');
