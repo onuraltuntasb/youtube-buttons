@@ -1,5 +1,4 @@
 .btn-speed-container {
-
     display: grid;
     grid-template-columns: 30px 30px 30px 30px;
     grid-template-rows: 20px 20px;
@@ -24,6 +23,39 @@
     font-size: 10px;
     margin: 2px;
     width: 24px;
+    height: 18px;
+    opacity: 0.9;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/*quality*/
+.btn-quality-container {
+    display: grid;
+    grid-template-columns: 30px 30px 30px 30px 30px;
+    grid-template-rows: 20px 20px;
+}
+
+.ytp-right-controls {
+    display: flex;
+}
+
+#quality-buttons-outerdiv-id {
+    margin-top: 4px;
+    margin-left: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-quality {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 8px;
+    margin: 2px;
+    width: 28px;
     height: 18px;
     opacity: 0.9;
     border-radius: 4px;

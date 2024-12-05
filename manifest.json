@@ -6,7 +6,7 @@
 
 	"web_accessible_resources": [
 		{
-			"resources": ["speedButtons.html"],
+			"resources": ["speedButtons.html","qualityButtons.html"],
 			"matches": ["<all_urls>"]
 		}
 	],
