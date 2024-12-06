@@ -15,16 +15,23 @@ const YOUTUBE_MENU_ITEM_LABEL_CLASSNAME = 'ytp-menuitem-label';
 function starter() {
     chrome.runtime.onMessage.addListener((message) => {
         //url change listener
-        if (message.action === 'urlChanged') {
+
+        console.log('message :', message);
+
+        if (message.msg.includes('watch?v')) {
+            console.log('url changed!');
             injectYoutubeSpeedButtons();
             injectYoutubeQualityButtons();
         }
     });
-    injectYoutubeSpeedButtons();
-    injectYoutubeQualityButtons();
+    if (document.location.href.includes('watch?v')) {
+        console.log('refreshed!');
+        injectYoutubeSpeedButtons();
+        injectYoutubeQualityButtons();
+    }
 }
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', doSomething);
+    document.addEventListener('DOMContentLoaded', starter);
 } else {
     starter();
 }
@@ -109,7 +116,31 @@ function injectYoutubeQualityButtons() {
                     let checkBtnQualityRendered = setInterval(() => {
                         // find Quality button as order (i don't want to deal with
                         // language spesifications)
-                        let btnQuality = btnSettingsPopup.children[btnSettingsPopup.children.length - 1];
+
+                        let btnQuality = null;
+                        btnQuality = btnSettingsPopup.children[btnSettingsPopup.children.length - 1];
+
+                        // Array.from(btnSettingsPopup.children).forEach((el) => {
+                        //     Array.from(el.children).forEach((element) => {
+                        //         if (element.innerHTML === 'Quality' || element.innerHTML === 'Kalite') {
+                        //             btnQuality = element;
+                        //         }
+                        //     });
+                        // });
+                        console.log('l :', btnQuality);
+                        console.log('btnQuality.children[1] :', btnQuality.children[1]);
+
+                        if (
+                            btnQuality.children[1].innerHTML !== 'Quality' &&
+                            btnQuality.children[1].innerHTML !== 'Kalite'
+                        ) {
+                            console.log(
+                                'btnSettingsPopup.children[btnSettingsPopup.children.length - 1] :',
+                                btnSettingsPopup.children[btnSettingsPopup.children.length - 1],
+                            );
+                            btnQuality = btnSettingsPopup.children[btnSettingsPopup.children.length];
+                        }
+                        console.log('btnQuality!', btnQuality);
 
                         if (btnQuality != undefined || btnQuality != null) {
                             btnQuality.click();
