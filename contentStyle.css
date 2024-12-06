@@ -1,12 +1,18 @@
-#speed-buttons-outerdiv-id{
-    display:inline-block;
-}
-
-#btn-speed-container {
+#speed-buttons-outerdiv-id {
+    display: flex;
+    margin-right: 8px;
+    margin-left: 4px;
+    align-items: center;
+    justify-content: center;
 }
 
 #current-speed {
+    margin-left: 8px;
     display: block;
+}
+
+#current-speed-wrapper{
+    display: flex;
 }
 
 #btns-speed-wrapper {
@@ -14,17 +20,6 @@
     display: none;
     grid-template-columns: 30px 30px 30px 30px;
     grid-template-rows: 20px 20px;
-}
-
-/* .ytp-right-controls {
-    display: block;
-} */
-
-#speed-buttons-outerdiv-id {
-    display:inline-block;
-    margin-left: 4px;
-    align-items: center;
-    justify-content: center;
 }
 
 .btn-speed {
@@ -41,24 +36,28 @@
     cursor: pointer;
 }
 
-
 /*quality*/
-#btn-quality-container {
-}
-
 #current-quality {
     display: block;
+    transition: all 0.2s;
 }
+
+#current-quality-wrapper{
+    display: flex;
+}
+
 
 #btns-quality-wrapper {
     /* grid */
     display: none;
-    grid-template-columns: 30px 30px 30px 30px;
+    grid-template-columns: 46px 46px 46px 46px 46px;
     grid-template-rows: 20px 20px;
+    transition: all 0.2s;
 }
 
 #quality-buttons-outerdiv-id {
-    display:inline-block;
+    display: flex;
+    margin-right: 8px;
     margin-left: 4px;
     align-items: center;
     justify-content: center;
@@ -70,8 +69,8 @@
     justify-content: center;
     text-align: center;
     font-size: 10px;
-    margin: 2px;
-    width: 24px;
+    margin: 4px;
+    width: 44px;
     height: 18px;
     opacity: 0.9;
     border-radius: 4px;
