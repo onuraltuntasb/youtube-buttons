@@ -4,7 +4,7 @@ const YOUTUBE_INJECT_DIV_CLASSNAME = 'ytp-chrome-controls';
 const SPEED_BUTTONS_TEMPLATE_OUTER_DIV_ID = 'btn-speed-container';
 const YOUTUBE_SETTINGS_BUTTON_QUERY = 'button[data-tooltip-target-id="ytp-settings-button"]';
 const YOUTUBE_SETTINGS_PANEL_CLASSNAME = 'ytp-panel-menu';
-const YOUTEBE_VIDEO_PLAYER_CLASSNAME = 'video-stream html5-main-video';
+const YOUTUBE_VIDEO_PLAYER_CLASSNAME = 'video-stream html5-main-video';
 const SELECTED_BTN_BG_COLOR = '#717171';
 const SESSION_STORAGE_PLAYBACK_RATE_KEY = 'yt-player-playback-rate';
 const LOCAL_STORAGE_QUALITY_RATE_KEY = 'yt-player-quality';
@@ -15,19 +15,16 @@ const YOUTUBE_MENU_ITEM_LABEL_CLASSNAME = 'ytp-menuitem-label';
 function starter() {
     chrome.runtime.onMessage.addListener((message) => {
         //url change listener
-
-        console.log('message :', message);
-
         if (message.msg.includes('watch?v')) {
             console.log('url changed!');
             injectYoutubeSpeedButtons();
-            injectYoutubeQualityButtons();
+            // injectYoutubeQualityButtons();
         }
     });
     if (document.location.href.includes('watch?v')) {
         console.log('refreshed!');
         injectYoutubeSpeedButtons();
-        injectYoutubeQualityButtons();
+        // injectYoutubeQualityButtons();
     }
 }
 if (document.readyState === 'loading') {
@@ -86,7 +83,7 @@ function giveMouseStyleEvents(buttonType) {
 }
 
 function clickTheVideoFrame() {
-    let videoEl = document.getElementsByClassName(YOUTEBE_VIDEO_PLAYER_CLASSNAME)[0];
+    let videoEl = document.getElementsByClassName(YOUTUBE_VIDEO_PLAYER_CLASSNAME)[0];
     let checkVideoElRendered = setInterval(() => {
         if (videoEl !== undefined && videoEl !== null) {
             videoEl.click();
@@ -96,6 +93,8 @@ function clickTheVideoFrame() {
 }
 
 function injectYoutubeQualityButtons() {
+    //FIXME: RERENDER QUALITY BUTTONS BUG
+    //FIXME: SOMETIMES QUALITY BUTTONS DOESN'T GET QUALITIES CORRECTLY. IT RENDERS LATEST VIDEO'S QUALITIES
     if (document.getElementById(QUALITY_BUTTONS_OUTER_DIV_ID)) {
         document.getElementById(QUALITY_BUTTONS_OUTER_DIV_ID).remove();
     }
@@ -115,7 +114,7 @@ function injectYoutubeQualityButtons() {
 
                     let checkBtnQualityRendered = setInterval(() => {
                         // find Quality button as order (i don't want to deal with
-                        // language spesifications)
+                        // language specifications)
 
                         let btnQuality = null;
                         btnQuality = btnSettingsPopup.children[btnSettingsPopup.children.length - 1];
@@ -256,7 +255,7 @@ function handleQualityButtons(btnId) {
 
                             let checkBtnQualityRendered = setInterval(() => {
                                 // find Quality button as order (i don't want to deal with
-                                // language spesifications)
+                                // language specifications)
                                 let btnQuality = btnSettingsPopup.children[btnSettingsPopup.children.length - 1];
 
                                 if (btnQuality != undefined || btnQuality != null) {
@@ -346,7 +345,8 @@ function injectYoutubeSpeedButtons() {
                 currentSpeedEl.innerHTML = getPlaybackSpeed();
             }
 
-            giveMouseStyleEvents('speed');
+            // disabled hover effect
+            // giveMouseStyleEvents('speed');
 
             handleSpeedBtnClick('0.25');
             handleSpeedBtnClick('0.50');
@@ -378,10 +378,22 @@ function handleSpeedBtnClick(btnId) {
                             // console.log("btnSettingsPopup clicked!", btnSettingsPopup);
 
                             let checkBtnPlaybackSpeedRendered = setInterval(() => {
-                                // find playbackSpeed button as order (i don't want to deal with
-                                // language spesifications)
-                                let btnPlaybackSpeed =
-                                    btnSettingsPopup.children[btnSettingsPopup.childElementCount - 3];
+                                //TODO: check playback button name in every language that youtube supports
+                                // let btnPlaybackSpeed =
+                                //     btnSettingsPopup.children[btnSettingsPopup.childElementCount - 3];
+                                let btnPlaybackSpeed = null;
+                                Array.from(btnSettingsPopup.children).forEach((el) => {
+                                    Array.from(el.children).forEach((el1) => {
+                                        if (
+                                            el1.className == 'ytp-menuitem-label' &&
+                                            (el1.innerHTML == 'Playback speed' || el1.innerHTML == 'Çalma hızı')
+                                        ) {
+                                            btnPlaybackSpeed = el1;
+                                            return;
+                                        }
+                                    });
+                                    // console.log('el :', el.children);
+                                });
 
                                 if (btnPlaybackSpeed != undefined || btnPlaybackSpeed != null) {
                                     btnPlaybackSpeed.click();

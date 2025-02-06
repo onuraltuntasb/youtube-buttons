@@ -11,13 +11,14 @@
     display: block;
 }
 
-#current-speed-wrapper{
+#current-speed-wrapper {
     display: flex;
 }
 
 #btns-speed-wrapper {
     /* grid */
-    display: none;
+    /* none */
+    display: grid;
     grid-template-columns: 30px 30px 30px 30px;
     grid-template-rows: 20px 20px;
 }
@@ -42,10 +43,9 @@
     transition: all 0.2s;
 }
 
-#current-quality-wrapper{
+#current-quality-wrapper {
     display: flex;
 }
-
 
 #btns-quality-wrapper {
     /* grid */
