@@ -48,6 +48,8 @@ function getQuality() {
 function getPlaybackSpeed() {
     let playbackSpeedData = sessionStorage.getItem(SESSION_STORAGE_PLAYBACK_RATE_KEY);
     let playbackSpeed = '1.00';
+
+    // console.log('📌 ~ contentScript.js:52 ~ getPlaybackSpeed ~ playbackSpeedData:', playbackSpeedData);
     if (playbackSpeedData) {
         playbackSpeed = JSON.parse(playbackSpeedData).data;
     }
@@ -58,7 +60,12 @@ function getPlaybackSpeed() {
         playbackSpeed = playbackSpeed + '0';
     }
 
-    return playbackSpeed;
+    // FIXME: YOUTUBE NEW UI UPDATE DOESN'T UPDATE SESSION COOKIE SO GET SPEED FROM VIDEO ELEMENT'S ITSELF
+    playbackSpeed = document.querySelector('video').playbackRate;
+
+    // console.log('📌 ~ contentScript.js:66 ~ getPlaybackSpeed ~ playbackSpeed:', playbackSpeed);
+
+    return playbackSpeed.toString();
 }
 
 function giveMouseStyleEvents(buttonType) {
@@ -369,13 +376,13 @@ function handleSpeedBtnClick(btnId) {
 
                 if (btnSettings != undefined || btnSettings != null) {
                     btnSettings.click();
-                    // console.log("btnSettings clicked!");
+                    // console.log('btnSettings clicked!');
                     let checkBtnSettingsPopupRendered = setInterval(() => {
                         let btnSettingsPopup = document.getElementsByClassName(YOUTUBE_SETTINGS_PANEL_CLASSNAME)[0];
 
                         if (btnSettingsPopup != undefined || btnSettingsPopup != null) {
                             btnSettingsPopup.click();
-                            // console.log("btnSettingsPopup clicked!", btnSettingsPopup);
+                            // console.log('btnSettingsPopup clicked!', btnSettingsPopup);
 
                             let checkBtnPlaybackSpeedRendered = setInterval(() => {
                                 //TODO: check playback button name in every language that youtube supports
@@ -395,106 +402,147 @@ function handleSpeedBtnClick(btnId) {
                                     // console.log('el :', el.children);
                                 });
 
+                                // NOTE: FOR OLD PLAYBACK SPEED UI
                                 if (btnPlaybackSpeed != undefined || btnPlaybackSpeed != null) {
                                     btnPlaybackSpeed.click();
-                                    // console.log("btnPlaybackSpeed clicked!", btnPlaybackSpeed);
+                                    // console.log('btnPlaybackSpeed clicked!', btnPlaybackSpeed);
 
                                     let checkBtnPlaybackSpeedPopupRendered = setInterval(() => {
-                                        let btnPlaybackSpeedPopup = document.getElementsByClassName(
-                                            YOUTUBE_SETTINGS_PANEL_CLASSNAME,
-                                        )[1];
+                                        let btnPlaybackSpeedPopup = document.getElementsByClassName('ytp-panel')[0];
+
                                         if (btnPlaybackSpeedPopup != undefined || btnPlaybackSpeedPopup != null) {
                                             // console.log("btnPlaybackSpeedPopup !", btnPlaybackSpeedPopup);
 
-                                            let btnPlaybackSpeedPopupArray = Array.from(
-                                                btnPlaybackSpeedPopup.children,
-                                            ).filter((el) => el.className === YOUTUBE_MENU_ITEM_CLASSNAME);
+                                            let btnDecSpeed =
+                                                document.getElementsByClassName('ytp-panel')[0].children[1].children[1]
+                                                    .children[0];
 
-                                            let btnSpeed = null;
+                                            let btnIncSpeed =
+                                                document.getElementsByClassName('ytp-panel')[0].children[1].children[1]
+                                                    .children[2];
+
+                                            let prevSpeed = getPlaybackSpeed() * 100;
+                                            let step = null;
                                             if (btnId == '0.25') {
-                                                btnPlaybackSpeedPopupArray.forEach((el) => {
-                                                    let ch = el.children[0];
-                                                    if (ch.className === YOUTUBE_MENU_ITEM_LABEL_CLASSNAME) {
-                                                        if (ch.innerHTML === '0.25') {
-                                                            btnSpeed = el;
-                                                        }
+                                                step = (prevSpeed - 25) / 5;
+                                                if (step > 0) {
+                                                    while (step > 0) {
+                                                        btnDecSpeed.click();
+                                                        step--;
                                                     }
-                                                });
+                                                }
+                                                if (step < 0) {
+                                                    while (step < 0) {
+                                                        btnIncSpeed.click();
+                                                        step++;
+                                                    }
+                                                }
                                             } else if (btnId == '0.50') {
-                                                btnPlaybackSpeedPopupArray.forEach((el) => {
-                                                    let ch = el.children[0];
-                                                    if (ch.className === YOUTUBE_MENU_ITEM_LABEL_CLASSNAME) {
-                                                        if (ch.innerHTML === '0.50' || ch.innerHTML === '0.5') {
-                                                            btnSpeed = el;
-                                                        }
+                                                step = (prevSpeed - 50) / 5;
+                                                if (step > 0) {
+                                                    while (step > 0) {
+                                                        btnDecSpeed.click();
+                                                        step--;
                                                     }
-                                                });
+                                                }
+                                                if (step < 0) {
+                                                    while (step < 0) {
+                                                        btnIncSpeed.click();
+                                                        step++;
+                                                    }
+                                                }
                                             } else if (btnId == '0.75') {
-                                                btnPlaybackSpeedPopupArray.forEach((el) => {
-                                                    let ch = el.children[0];
-                                                    if (ch.className === YOUTUBE_MENU_ITEM_LABEL_CLASSNAME) {
-                                                        if (ch.innerHTML === '0.75') {
-                                                            btnSpeed = el;
-                                                        }
+                                                step = (prevSpeed - 75) / 5;
+
+                                                if (step > 0) {
+                                                    while (step > 0) {
+                                                        btnDecSpeed.click();
+                                                        step--;
                                                     }
-                                                });
+                                                }
+                                                if (step < 0) {
+                                                    while (step < 0) {
+                                                        btnIncSpeed.click();
+                                                        step++;
+                                                    }
+                                                }
                                             } else if (btnId == '1.00') {
-                                                btnPlaybackSpeedPopupArray.forEach((el) => {
-                                                    let ch = el.children[0];
-                                                    if (ch.className === YOUTUBE_MENU_ITEM_LABEL_CLASSNAME) {
-                                                        if (
-                                                            ch.innerHTML === 'Normal' ||
-                                                            ch.innerHTML === '1.00' ||
-                                                            ch.innerHTML === '1.0' ||
-                                                            ch.innerHTML === '1'
-                                                        ) {
-                                                            btnSpeed = el;
-                                                        }
+                                                step = (prevSpeed - 100) / 5;
+
+                                                if (step > 0) {
+                                                    while (step > 0) {
+                                                        btnDecSpeed.click();
+                                                        step--;
                                                     }
-                                                });
+                                                }
+                                                if (step < 0) {
+                                                    while (step < 0) {
+                                                        btnIncSpeed.click();
+                                                        step++;
+                                                    }
+                                                }
                                             } else if (btnId == '1.25') {
-                                                btnPlaybackSpeedPopupArray.forEach((el) => {
-                                                    let ch = el.children[0];
-                                                    if (ch.className === YOUTUBE_MENU_ITEM_LABEL_CLASSNAME) {
-                                                        if (ch.innerHTML === '1.25') {
-                                                            btnSpeed = el;
-                                                        }
+                                                step = (prevSpeed - 125) / 5;
+
+                                                if (step > 0) {
+                                                    while (step > 0) {
+                                                        btnDecSpeed.click();
+                                                        step--;
                                                     }
-                                                });
+                                                }
+                                                if (step < 0) {
+                                                    while (step < 0) {
+                                                        btnIncSpeed.click();
+                                                        step++;
+                                                    }
+                                                }
                                             } else if (btnId == '1.50') {
-                                                btnPlaybackSpeedPopupArray.forEach((el) => {
-                                                    let ch = el.children[0];
-                                                    if (ch.className === YOUTUBE_MENU_ITEM_LABEL_CLASSNAME) {
-                                                        if (ch.innerHTML === '1.50' || ch.innerHTML === '1.5') {
-                                                            btnSpeed = el;
-                                                        }
+                                                step = (prevSpeed - 150) / 5;
+
+                                                if (step > 0) {
+                                                    while (step > 0) {
+                                                        btnDecSpeed.click();
+                                                        step--;
                                                     }
-                                                });
+                                                }
+                                                if (step < 0) {
+                                                    while (step < 0) {
+                                                        btnIncSpeed.click();
+                                                        step++;
+                                                    }
+                                                }
                                             } else if (btnId == '1.75') {
-                                                btnPlaybackSpeedPopupArray.forEach((el) => {
-                                                    let ch = el.children[0];
-                                                    if (ch.className === YOUTUBE_MENU_ITEM_LABEL_CLASSNAME) {
-                                                        if (ch.innerHTML === '1.75') {
-                                                            btnSpeed = el;
-                                                        }
+                                                step = (prevSpeed - 175) / 5;
+
+                                                if (step > 0) {
+                                                    while (step > 0) {
+                                                        btnDecSpeed.click();
+                                                        step--;
                                                     }
-                                                });
+                                                }
+                                                if (step < 0) {
+                                                    while (step < 0) {
+                                                        btnIncSpeed.click();
+                                                        step++;
+                                                    }
+                                                }
                                             } else if (btnId == '2.00') {
-                                                btnPlaybackSpeedPopupArray.forEach((el) => {
-                                                    let ch = el.children[0];
-                                                    if (ch.className === YOUTUBE_MENU_ITEM_LABEL_CLASSNAME) {
-                                                        if (
-                                                            ch.innerHTML === '2.00' ||
-                                                            ch.innerHTML === '2.0' ||
-                                                            ch.innerHTML === '2'
-                                                        ) {
-                                                            btnSpeed = el;
-                                                        }
+                                                step = (prevSpeed - 200) / 5;
+
+                                                if (step > 0) {
+                                                    while (step > 0) {
+                                                        btnDecSpeed.click();
+                                                        step--;
                                                     }
-                                                });
+                                                }
+                                                if (step < 0) {
+                                                    while (step < 0) {
+                                                        btnIncSpeed.click();
+                                                        step++;
+                                                    }
+                                                }
                                             }
-                                            if (btnSpeed) {
-                                                btnSpeed.click();
+                                            if (btnDecSpeed && btnIncSpeed) {
                                                 clickTheVideoFrame();
                                                 let speedButtons = document.getElementById('btns-speed-wrapper');
                                                 if (speedButtons) {
