@@ -422,126 +422,19 @@ function handleSpeedBtnClick(btnId) {
                                                     .children[2];
 
                                             let prevSpeed = getPlaybackSpeed() * 100;
-                                            let step = null;
-                                            if (btnId == '0.25') {
-                                                step = (prevSpeed - 25) / 5;
-                                                if (step > 0) {
-                                                    while (step > 0) {
-                                                        btnDecSpeed.click();
-                                                        step--;
-                                                    }
-                                                }
-                                                if (step < 0) {
-                                                    while (step < 0) {
-                                                        btnIncSpeed.click();
-                                                        step++;
-                                                    }
-                                                }
-                                            } else if (btnId == '0.50') {
-                                                step = (prevSpeed - 50) / 5;
-                                                if (step > 0) {
-                                                    while (step > 0) {
-                                                        btnDecSpeed.click();
-                                                        step--;
-                                                    }
-                                                }
-                                                if (step < 0) {
-                                                    while (step < 0) {
-                                                        btnIncSpeed.click();
-                                                        step++;
-                                                    }
-                                                }
-                                            } else if (btnId == '0.75') {
-                                                step = (prevSpeed - 75) / 5;
 
-                                                if (step > 0) {
-                                                    while (step > 0) {
-                                                        btnDecSpeed.click();
-                                                        step--;
-                                                    }
-                                                }
-                                                if (step < 0) {
-                                                    while (step < 0) {
-                                                        btnIncSpeed.click();
-                                                        step++;
-                                                    }
-                                                }
-                                            } else if (btnId == '1.00') {
-                                                step = (prevSpeed - 100) / 5;
+                                            const target = Math.round(parseFloat(btnId) * 100);
+                                            let step = Math.round((prevSpeed - target) / 5);
 
-                                                if (step > 0) {
-                                                    while (step > 0) {
-                                                        btnDecSpeed.click();
-                                                        step--;
-                                                    }
-                                                }
-                                                if (step < 0) {
-                                                    while (step < 0) {
-                                                        btnIncSpeed.click();
-                                                        step++;
-                                                    }
-                                                }
-                                            } else if (btnId == '1.25') {
-                                                step = (prevSpeed - 125) / 5;
+                                            if (step !== 0) {
+                                                const clickBtn = step > 0 ? btnDecSpeed : btnIncSpeed;
+                                                const count = Math.abs(step);
 
-                                                if (step > 0) {
-                                                    while (step > 0) {
-                                                        btnDecSpeed.click();
-                                                        step--;
-                                                    }
-                                                }
-                                                if (step < 0) {
-                                                    while (step < 0) {
-                                                        btnIncSpeed.click();
-                                                        step++;
-                                                    }
-                                                }
-                                            } else if (btnId == '1.50') {
-                                                step = (prevSpeed - 150) / 5;
-
-                                                if (step > 0) {
-                                                    while (step > 0) {
-                                                        btnDecSpeed.click();
-                                                        step--;
-                                                    }
-                                                }
-                                                if (step < 0) {
-                                                    while (step < 0) {
-                                                        btnIncSpeed.click();
-                                                        step++;
-                                                    }
-                                                }
-                                            } else if (btnId == '1.75') {
-                                                step = (prevSpeed - 175) / 5;
-
-                                                if (step > 0) {
-                                                    while (step > 0) {
-                                                        btnDecSpeed.click();
-                                                        step--;
-                                                    }
-                                                }
-                                                if (step < 0) {
-                                                    while (step < 0) {
-                                                        btnIncSpeed.click();
-                                                        step++;
-                                                    }
-                                                }
-                                            } else if (btnId == '2.00') {
-                                                step = (prevSpeed - 200) / 5;
-
-                                                if (step > 0) {
-                                                    while (step > 0) {
-                                                        btnDecSpeed.click();
-                                                        step--;
-                                                    }
-                                                }
-                                                if (step < 0) {
-                                                    while (step < 0) {
-                                                        btnIncSpeed.click();
-                                                        step++;
-                                                    }
+                                                for (let i = 0; i < count; i++) {
+                                                    clickBtn.click();
                                                 }
                                             }
+
                                             if (btnDecSpeed && btnIncSpeed) {
                                                 clickTheVideoFrame();
                                                 let speedButtons = document.getElementById('btns-speed-wrapper');
